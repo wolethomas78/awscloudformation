@@ -1,0 +1,113 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Here are some details about the ntier architecture.",
+    "Parameters": {
+        "vpcname": {
+            "Description": "Enter the name of your vpc",
+            "Type": "String",
+            "Default": "vpcprod"
+        },
+        "vpccidrrange": {
+            "Description": "Enter the name of your vpc cidr",
+            "Type": "String",
+            "Default": "10.0.0.0/16"
+        },
+        "webcidrrange": {
+            "Description": "Enter the name of your websubnet cidr",
+            "Type": "String",
+            "Default": "10.0.1.0/24"
+        },
+        "appcidrrange": {
+            "Description": "Enter the name of your appsubnet cidr",
+            "Type": "String",
+            "Default": "10.0.2.0/24"
+        },
+        "dbcidrrange": {
+            "Description": "Enter the name of your dbsubnet cidr",
+            "Type": "String",
+            "Default": "10.0.3.0/24"
+        }
+    },
+    "Resources": {
+        "ntiervpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "vpccidrrange"
+                },
+                "EnableDnsSupport": "true",
+                "EnableDnsHostnames": "true",
+                "InstanceTenancy": "default",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "vpcname"
+                        }
+                    }
+                ]
+            }
+        },
+        "webSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "webcidrrange"
+                },
+                "AvailabilityZone": "us-east-1a",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "myweb_subnet"
+                    }
+                ]
+            }
+        },
+        "appSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "appcidrrange"
+                },
+                "AvailabilityZone": "us-east-1b",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "myapp_subnet"
+                    }
+                ]
+            }
+        },
+        "dbSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "dbcidrrange"
+                },
+                "AvailabilityZone": "us-east-1c",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "mydb_subnet"
+                    }
+                ]
+            }
+        },
+        "Mywebinstance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "AvailabilityZone": "us-east-1a",
+                "ImageId": "ami-0cff7528ff583bf9a"
+            }
+        }
+    }
+}
