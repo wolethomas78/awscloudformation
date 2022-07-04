@@ -15,17 +15,32 @@
         "webcidrrange": {
             "Description": "Enter the name of your websubnet cidr",
             "Type": "String",
-            "Default": "10.0.1.0/24"
+            "Default": "10.0.0.0/24"
         },
         "appcidrrange": {
             "Description": "Enter the name of your appsubnet cidr",
             "Type": "String",
-            "Default": "10.0.2.0/24"
+            "Default": "10.0.1.0/24"
         },
         "dbcidrrange": {
             "Description": "Enter the name of your dbsubnet cidr",
             "Type": "String",
+            "Default": "10.0.2.0/24"
+        },
+        "webcidrrange2nd": {
+            "Description": "Enter the name of your websubnet cidr",
+            "Type": "String",
             "Default": "10.0.3.0/24"
+        },
+        "appcidrrange2nd": {
+            "Description": "Enter the name of your appsubnet cidr",
+            "Type": "String",
+            "Default": "10.0.4.0/24"
+        },
+        "dbcidrrange2nd": {
+            "Description": "Enter the name of your dbsubnet cidr",
+            "Type": "String",
+            "Default": "10.0.5.0/24"
         },
         "websubnetAZ": {
             "Description": "Enter the name of your websubnet AZ",
@@ -36,6 +51,18 @@
             "Type": "AWS::EC2::AvailabilityZone::Name"
         },
         "dbsubnetAZ": {
+            "Description": "Enter the name of your dbsubnet AZ",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "websubnetAZ2nd": {
+            "Description": "Enter the name of your websubnet AZ",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "appsubnetAZ2nd": {
+            "Description": "Enter the name of your appsubnet AZ",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "dbsubnetAZ2nd": {
             "Description": "Enter the name of your dbsubnet AZ",
             "Type": "AWS::EC2::AvailabilityZone::Name"
         }
@@ -80,6 +107,26 @@
                 ]
             }
         },
+        "webSubnet2nd": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "webcidrrange2nd"
+                },
+                "AvailabilityZone": {
+                    "Ref": "websubnetAZ2nd"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "myweb_subnet"
+                    }
+                ]
+            }
+        },
         "appSubnet": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
@@ -91,6 +138,26 @@
                 },
                 "AvailabilityZone": {
                     "Ref": "appsubnetAZ"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "myapp_subnet"
+                    }
+                ]
+            }
+        },
+        "appSubnet2nd": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "appcidrrange2nd"
+                },
+                "AvailabilityZone": {
+                    "Ref": "appsubnetAZ2nd"
                 },
                 "Tags": [
                     {
@@ -120,11 +187,24 @@
                 ]
             }
         },
-        "Mywebinstance": {
-            "Type": "AWS::EC2::Instance",
+        "dbSubnet2nd": {
+            "Type": "AWS::EC2::Subnet",
             "Properties": {
-                "AvailabilityZone": "us-east-1a",
-                "ImageId": "ami-0cff7528ff583bf9a"
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Ref": "dbcidrrange2nd"
+                },
+                "AvailabilityZone": {
+                    "Ref": "dbsubnetAZ2nd"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "mydb_subnet"
+                    }
+                ]
             }
         }
     }
