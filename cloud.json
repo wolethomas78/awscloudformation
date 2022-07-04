@@ -26,6 +26,18 @@
             "Description": "Enter the name of your dbsubnet cidr",
             "Type": "String",
             "Default": "10.0.3.0/24"
+        },
+        "websubnetAZ": {
+            "Description": "Enter the name of your websubnet AZ",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "appsubnetAZ": {
+            "Description": "Enter the name of your appsubnet AZ",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "dbsubnetAZ": {
+            "Description": "Enter the name of your dbsubnet AZ",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
         }
     },
     "Resources": {
@@ -57,7 +69,9 @@
                 "CidrBlock": {
                     "Ref": "webcidrrange"
                 },
-                "AvailabilityZone": "us-east-1a",
+                "AvailabilityZone": {
+                    "Ref": "websubnetAZ"
+                },
                 "Tags": [
                     {
                         "Key": "Name",
@@ -75,7 +89,9 @@
                 "CidrBlock": {
                     "Ref": "appcidrrange"
                 },
-                "AvailabilityZone": "us-east-1b",
+                "AvailabilityZone": {
+                    "Ref": "appsubnetAZ"
+                },
                 "Tags": [
                     {
                         "Key": "Name",
@@ -93,7 +109,9 @@
                 "CidrBlock": {
                     "Ref": "dbcidrrange"
                 },
-                "AvailabilityZone": "us-east-1c",
+                "AvailabilityZone": {
+                    "Ref": "dbsubnetAZ"
+                },
                 "Tags": [
                     {
                         "Key": "Name",
