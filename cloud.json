@@ -65,12 +65,6 @@
         "dbsubnetAZ2nd": {
             "Description": "Enter the name of your dbsubnet AZ",
             "Type": "AWS::EC2::AvailabilityZone::Name"
-    
-        },
-        "appserversize": {
-            "Description": "Select the ec2 instance size",
-            "Type": "String",
-            "Default": "t2.micro"
         }
     },
     "Resources": {
@@ -500,12 +494,8 @@
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "KeyName": "A4L",
-                "DisableApiTermination": "-",
                 "ImageId": "ami-0f1aec6bc79ad857c",
-                "InstanceType": {
-                    "Ref": "appserversize"
-                },
-                "Monitoring": "false",
+                "InstanceType": "t2.mcro",
                 "SubnetId": {
                     "Ref": "appSubnet"
                 },
@@ -538,11 +528,8 @@
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "KeyName": "A4L",
-                "DisableApiTermination": "-",
                 "ImageId": "ami-0f1aec6bc79ad857c",
-                "InstanceType": {
-                    "Ref": "appserversize"
-                },
+                "InstanceType": "t2.mcro",
                 "Monitoring": "false",
                 "SubnetId": {
                     "Ref": "appSubnet2nd"
@@ -566,6 +553,74 @@
                                 "apt get install Tomcat8 -y",
                                 "systemctl start Tomcat9",
                                 "systemctl enable Tomcat9",
+                            ]
+                        ]
+                    }
+                }
+            }
+        },
+        "webserver": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "KeyName": "A4L",
+                "ImageId": "ami-0f1aec6bc79ad857c",
+                "InstanceType": "t2.mcro",
+                "SubnetId": {
+                    "Ref": "appSubnet"
+                },
+                "SecurityGroupIds": {
+                    "Ref": "websecuritygrp"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "webserver1"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -ex",
+                                "sudo apt get update -y",
+                                "apt get install httpd -y",
+                                "systemctl start httpd",
+                                "systemctl enable httpd",
+                            ]
+                        ]
+                    }
+                }
+            }
+        },
+        "webserver2": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "KeyName": "A4L",
+                "ImageId": "ami-0f1aec6bc79ad857c",
+                "InstanceType": "t2.micro",
+                "SubnetId": {
+                    "Ref": "webSubnet2nd"
+                },
+                "SecurityGroupIds": {
+                    "Ref": "websecuritygrp"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "webserver2"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -ex",
+                                "sudo apt get update -y",
+                                "apt get install httpd -y",
+                                "systemctl start httpd",
+                                "systemctl enable httpd",
                             ]
                         ]
                     }
