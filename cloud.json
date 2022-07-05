@@ -228,6 +228,165 @@
                     "Ref": "myInternetGateway"
                 }
             }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "publicRouTeTable"
+                    }
+                ]
+            }
+        },
+        "myPrvrouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PrivateRT"
+                    }
+                ]
+            }
+        },
+        "Publicgateway": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRoute"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "myInternetGateway",
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "publicRouTeTable"
+                        }
+                    ]
+                }
+            }
+        },
+        "mySubnetRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "webSubnet"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRoute"
+                }
+            }
+        },
+        "mySubnetRouteTableAssociation1": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "webSubnet2nd"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRoute"
+                }
+            }
+        },
+        "myappSubnetRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "appSubnet"
+                },
+                "RouteTableId": {
+                    "Ref": "myPrvrouteTable"
+                }
+            }
+        },
+        "myappSubnetRouteTableAssociation1": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "appSubnet2nd"
+                },
+                "RouteTableId": {
+                    "Ref": "myPrvrouteTable"
+                }
+            }
+        },
+        "mydbSubnetRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "dbSubnet"
+                },
+                "RouteTableId": {
+                    "Ref": "myPrvrouteTable"
+                }
+            }
+        },
+        "mydbSubnetRouteTableAssociation1": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "dbSubnet2nd"
+                },
+                "RouteTableId": {
+                    "Ref": "myPrvrouteTable"
+                }
+            }
+        },
+        "DBSubnetGroup": {
+            "Type": "AWS::RDS::DBSecurityGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "HA for IT",
+                "SubnetIds": [
+                    {
+                        "Ref": "dbSubnet"
+                    },
+                    {
+                        "Ref": "dbSubnet2nd"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "dbsubnetgrp"
+                    }
+                ]
+            }
+        },
+        "ntierdb": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "AllocatedStorage": "20",
+                "DBInstanceClass": "db.t2.micro",
+                "AllowMajorVersionUpgrade": "false",
+                "AutoMinorVersionUpgrade": "false",
+                "BackupRetentionPeriod": "0",
+                "DBInstanceIdentifier": "itntierdb",
+                "DBName": "itntier",
+                "DBSubnetGroupName": {
+                    "Ref": "DBSubnetGroup"
+                },
+                "Engine": "mysql",
+                "MasterUsername": "admin",
+                "MasterUserPassword": "admin123",
+                "MultiAZ": "false",
+                "PubliclyAccessible": "true",
+                "StorageType": "gp2",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "mysqldb"
+                    }
+                ]
+            }
         }
     }
 }
